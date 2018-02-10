@@ -7,7 +7,7 @@ You can donwload the RPi.GPIO_NP from:
 https://github.com/friendlyarm/RPi.GPIO_NP
 
 ## Download
-    git clone https://github.com/friendlyarm/RPi.GPIO_NP
+    git clone https://github.com/chainsx/RPi.GPIO.NP
 
 ## Installation
     sudo apt-get update
@@ -17,9 +17,4 @@ https://github.com/friendlyarm/RPi.GPIO_NP
     sudo python setup.py install
     
 Please be attention that you need use both python and sudo python to make the RPi.GPIO_NP work well.
-
-## Examples
-You can go to FriendlyELEC wiki to see the basic examples: http://wiki.friendlyarm.com/wiki/index.php/RPi.GPIO_NP:_RPi.GPIO_for_NanoPi_NEO/NEO2
-And the source directory test also has many demo.
-
 
