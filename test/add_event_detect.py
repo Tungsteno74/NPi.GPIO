@@ -9,15 +9,15 @@ print("The value of Pin %d is %d" %(PIN_NUM,GPIO.input(PIN_NUM)))
 
 
 def my_callback(channel):
-	print("Callback trigger %d" %channel)
-	print("Now value of the Pin is %d" %(GPIO.input(PIN_NUM)))
-	print("Click Ctr + C to exit")
+    print("Callback trigger %d" %channel)
+    print("Now value of the Pin is %d" %(GPIO.input(PIN_NUM)))
+    print("Click Ctr + C to exit")
 
 GPIO.add_event_detect(PIN_NUM,GPIO.RISING,callback = my_callback,bouncetime = 300)
 
 try:
     while True:
-	time.sleep(0.1)
+        time.sleep(0.1)
 except KeyboardInterrupt:
     pass
 
