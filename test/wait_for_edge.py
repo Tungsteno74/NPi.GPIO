@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import RPi.GPIO as GPIO
+import NPi.GPIO as GPIO
 import time
 from threading import Timer
 
@@ -9,16 +9,16 @@ GPIO.setmode(GPIO.BOARD)
 GPIO.setup(PIN_NUM,GPIO.OUT)
 
 GPIO.output(PIN_NUM,True)
-print "\n value_%d = %d\n" %(PIN_NUM,GPIO.input(PIN_NUM))
+print("\n value_%d = %d\n" %(PIN_NUM,GPIO.input(PIN_NUM)))
 
 GPIO.setup(channel,GPIO.IN,GPIO.PUD_DOWN)
-print "\n value_%d = %d\n" %(channel,GPIO.input(channel))
+print("\n value_%d = %d\n" %(channel,GPIO.input(channel)))
 
 
 def makehigh():
-	print "\n value_%d = %d\n" %(channel,GPIO.input(channel))
+	print("\n value_%d = %d\n" %(channel,GPIO.input(channel)))
 	GPIO.output(PIN_NUM,False)
-	print "\n value_%d = %d\n" %(PIN_NUM,GPIO.input(PIN_NUM))
+	print("\n value_%d = %d\n" %(PIN_NUM,GPIO.input(PIN_NUM)))
 	
 	
 
