@@ -12,10 +12,10 @@ GPIO.add_event_detect(SWITCH_PIN, GPIO.RISING,bouncetime=200)  # add rising edge
 
 switchcount = 0
 while switchcount < 2:   
-	if GPIO.event_detected(SWITCH_PIN):
-		switchcount += 1
-		print('Button pressed',switchcount)
-		print("\n value_%d = %d\n" %(SWITCH_PIN,GPIO.input(SWITCH_PIN)))
+    if GPIO.event_detected(SWITCH_PIN):
+        switchcount += 1
+        print('Button pressed',switchcount)
+        print("\n value_%d = %d\n" %(SWITCH_PIN,GPIO.input(SWITCH_PIN)))
 		
 
 GPIO.remove_event_detect(SWITCH_PIN)
