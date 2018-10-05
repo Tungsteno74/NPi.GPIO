@@ -16,12 +16,10 @@ print("\n value_%d = %d\n" %(channel,GPIO.input(channel)))
 
 
 def makehigh():
-	print("\n value_%d = %d\n" %(channel,GPIO.input(channel)))
-	GPIO.output(PIN_NUM,False)
-	print("\n value_%d = %d\n" %(PIN_NUM,GPIO.input(PIN_NUM)))
+    print("\n value_%d = %d\n" %(channel,GPIO.input(channel)))
+    GPIO.output(PIN_NUM,False)
+    print("\n value_%d = %d\n" %(PIN_NUM,GPIO.input(PIN_NUM)))
 	
-	
-
 	
 GPIO.wait_for_edge(channel, GPIO.RISING)
 t = Timer(1,makehigh)
