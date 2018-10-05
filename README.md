@@ -1,20 +1,22 @@
 RPi.GPIO_NP README
 
-This is a modified version RPi.GPIO for NanoPi NEO/NEO2. We call it RPi.GPIO_NP.
-It is based on the original [RPi.GPIO](https://pypi.python.org/pypi/RPi.GPIO).
-The RPi.GPIO_NP API usage are the same to the original RPi.GPIO.
-You can donwload the RPi.GPIO_NP from:
-https://github.com/friendlyarm/RPi.GPIO_NP
+This is a [RPi.GPIO.NP](https://github.com/chainsx/RPi.GPIO.NP) fork, with some fixes and installable from [PyPI](https://pypi.org/project/NPi.GPIO/). As the project from which it is derived, is based on the original [RPi.GPIO](https://pypi.python.org/pypi/RPi.GPIO) (same for the API).   
+I will try to keep this version as up-to-date as possible and in line with the versions of the original project.   
+__It work with Python2.x and Python 3.x__
 
-## Download
-    git clone https://github.com/chainsx/RPi.GPIO.NP
+### APT 
+#### Common requirements
+    sudo apt update
+    sudo apt install python-dev 
 
-## Installation
-    sudo apt-get update
-    sudo apt-get install python-dev
-    cd /RPi.GPIO_NP
-    python setup.py install                 
+### PyPI
+#### Installation
+    sudo pip install NPi.GPIO
+
+### GIT
+#### Download
+    git clone https://github.com/Tungsteno74/NPi.GPIO
+
+#### Installation
+    cd /NPi.GPIO               
     sudo python setup.py install
-    
-Please be attention that you need use both python and sudo python to make the RPi.GPIO_NP work well.
-
