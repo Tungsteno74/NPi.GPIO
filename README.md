@@ -1,7 +1,7 @@
 RPi.GPIO_NP README
 
 This is a [RPi.GPIO.NP](https://github.com/chainsx/RPi.GPIO.NP) fork, with some fixes and installable from [PyPI](https://pypi.org/project/NPi.GPIO/). As the project from which it is derived, is based on the original [RPi.GPIO](https://pypi.python.org/pypi/RPi.GPIO) (same for the API).   
-I will try to keep this version as up-to-date as possible and in line with the versions of the original project.   
+I will try to keep this version as up-to-date as possible and in line with the original project's releases.   
 __It work with Python2.x and Python 3.x__
 
 ### APT 
