@@ -15,7 +15,7 @@ __It work with Python2.x and Python 3.x__
 
 ### GIT
 #### Download
-    git clone https://github.com/Tungsteno74/NPi.GPIO
+    git clone https://github.com/Tungsteno74/NPi.GPIO
 
 #### Installation
     cd /NPi.GPIO               
