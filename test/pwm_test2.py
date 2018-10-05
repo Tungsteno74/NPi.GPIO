@@ -1,4 +1,4 @@
-import RPi.GPIO as GPIO
+import NPi.GPIO as GPIO
 import time
 
 PIN_NUM = 12
