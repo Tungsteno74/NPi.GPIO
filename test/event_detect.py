@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import RPi.GPIO as GPIO
+import NPi.GPIO as GPIO
 import time
 from threading import Timer
 
