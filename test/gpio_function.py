@@ -6,5 +6,5 @@ GPIO.setmode(GPIO.BOARD)
 
 for pin in validPins:
 	fun = GPIO.gpio_function(pin)
-	print fun
+	print(fun)
 
