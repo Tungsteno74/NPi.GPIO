@@ -177,10 +177,87 @@ static int getAllwinnerBoardID(char* boardId, int boardIdMaxLen )
     return ret;
 }
 
+// Note: This function returns a pointer to a substring of the original string.
+// If the given string was allocated dynamically, the caller must not overwrite
+// that pointer with the returned value, since the original pointer must be
+// deallocated using the same allocator with which it was allocated.  The return
+// value must NOT be deallocated using free() etc.
+static char *trimwhitespaces(char *str)
+{
+  char *end;
+
+  // Trim leading space
+  while(isspace((unsigned char)*str)) str++;
+
+  if(*str == 0)  // All spaces?
+    return str;
+
+  // Trim trailing space
+  end = str + strlen(str) - 1;
+  while(end > str && isspace((unsigned char)*end)) end--;
+
+  // Write new null terminator character
+  end[1] = '\0';
+
+  return str;
+}
+
+static int getboardDisplayName(char* boardName, int boardNameMaxLen )
+{
+	int n,i,j;
+	char lineUntrim[1024], line[1024],*p;
+	const char* release_board_name_fieldname = "BOARD_NAME";
+	FILE *f;
+	int ret = -1;
+
+	if (!(f = fopen("/etc/friendlyelec-release", "r"))) {
+		LOGE("open /etc/friendlyelec-release failed.");
+		return -1;
+	}
+
+	while (!feof(f)) {
+		if(!fgets(lineUntrim, sizeof(lineUntrim), f)) {
+			break;
+		} else {
+			j=0;
+			
+			// Trim leading and traling spaces
+  			lineUntrim = trimwhitespaces(lineUntrim);	
+			
+			// Substitute inner spaces with dashes "-" and remove not alphanumeric chars
+			for(i=0; i<strlen(lineUntrim);i++) {
+				if ( lineUntrim[i] == '\t' || lineUntrim[i] == '\r' || lineUntrim[i] == '\n') {					
+				} else {
+					line[j++]=(lineUntrim[i] == '') ? '-' : lineUntrim[i];
+				}
+			}
+			line[j] = 0x00;
+			n = strlen(line);
+			if (n>0) {
+				//LOGD("LINE: %s\n", line);
+                if (p = strtok(line, ":")) {
+                    if (strncasecmp(p, release_board_name_fieldname, strlen(release_board_name_fieldname)) == 0) {
+                    	//LOGD("\t\tkey=\"%s\"\n", p);
+                        if (p = strtok(0, ":")) {
+                        	//LOGD("\t\tv=\"%s\"\n", p);
+                            memset(boardName,0,boardNameMaxLen);
+                            strncpy(boardName, p, boardNameMaxLen-1);
+                            ret = 0;
+                            break;
+                        }
+                    }
+                }  
+            }
+        }
+    }
+    fclose(f);
+    return ret;
+}
+
 int getBoardType(BoardHardwareInfo** retBoardInfo) {
 	char hardware[255];
 	char revision[255];
-	char allwinnerBoardID[255];
+	char boardDisplayName[255];
 	int ret;
 	int i;
 	memset(hardware, 0, sizeof(hardware));
@@ -215,13 +292,13 @@ int getBoardType(BoardHardwareInfo** retBoardInfo) {
     // h3 and h5, check hardware and boardid
 	if (strncasecmp(hardware, h3, strlen(h3)) == 0 || strncasecmp(hardware, h5, strlen(h5)) == 0
 		|| strncasecmp(hardware, h3_kernel4, strlen(h3_kernel4)) == 0 || strncasecmp(hardware, h5_kernel4, strlen(h5_kernel4)) == 0) {
-		int ret = getAllwinnerBoardID(allwinnerBoardID, sizeof(allwinnerBoardID));
+		int ret = getboardDisplayName(boardDisplayName, sizeof(boardDisplayName));
 		if (ret == 0) {
 			//LOGD("got boardid: %s\n", allwinnerBoardID);
 			for (i=0; i<(sizeof(gAllBoardHardwareInfo)/sizeof(BoardHardwareInfo)); i++) {
 				//LOGD("\t\t enum, start compare[%d]: %s <--> %s\n", i, gAllBoardHardwareInfo[i].kernelHardware, hardware);
 				if (strncasecmp(gAllBoardHardwareInfo[i].kernelHardware, hardware, strlen(gAllBoardHardwareInfo[i].kernelHardware)) == 0) {
-					if (strncasecmp(gAllBoardHardwareInfo[i].allwinnerBoardID, allwinnerBoardID, strlen(gAllBoardHardwareInfo[i].allwinnerBoardID)) == 0) {
+					if (strncasecmp(gAllBoardHardwareInfo[i].boardDisplayName, boardDisplayName, strlen(gAllBoardHardwareInfo[i].boardDisplayName)) == 0) {
 						if (retBoardInfo != 0) {
 							*retBoardInfo = &gAllBoardHardwareInfo[i];
 						}
