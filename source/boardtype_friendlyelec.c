@@ -226,7 +226,7 @@ static int getboardDisplayName(char* boardName, int boardNameMaxLen )
 			
 			// Substitute inner spaces with dashes "-" and remove not alphanumeric chars
 			for(i=0; i<strlen(lineUntrim);i++) {
-				if ( lineUntrim[i] == '\t' || lineUntrim[i] == '\r' || lineUntrim[i] == '\n') {					
+				if ( lineUntrim[i] == '"' || lineUntrim[i] == '\t' || lineUntrim[i] == '\r' || lineUntrim[i] == '\n') {					
 				} else {
 					line[j++]=(lineUntrim[i] == '') ? '-' : lineUntrim[i];
 				}
@@ -235,21 +235,21 @@ static int getboardDisplayName(char* boardName, int boardNameMaxLen )
 			n = strlen(line);
 			if (n>0) {
 				//LOGD("LINE: %s\n", line);
-                if (p = strtok(line, ":")) {
-                    if (strncasecmp(p, release_board_name_fieldname, strlen(release_board_name_fieldname)) == 0) {
-                    	//LOGD("\t\tkey=\"%s\"\n", p);
-                        if (p = strtok(0, ":")) {
-                        	//LOGD("\t\tv=\"%s\"\n", p);
-                            memset(boardName,0,boardNameMaxLen);
-                            strncpy(boardName, p, boardNameMaxLen-1);
-                            ret = 0;
-                            break;
-                        }
-                    }
-                }  
-            }
-        }
-    }
+				if (p = strtok(line, "=")) {
+				    if (strncasecmp(p, release_board_name_fieldname, strlen(release_board_name_fieldname)) == 0) {
+					//LOGD("\t\tkey=\"%s\"\n", p);
+					if (p = strtok(0, "=")) {
+						//LOGD("\t\tv=\"%s\"\n", p);
+					    memset(boardName,0,boardNameMaxLen);
+					    strncpy(boardName, p, boardNameMaxLen-1);
+					    ret = 0;
+					    break;
+					}
+				    }
+				}  
+            		}
+        	}
+    	}
     fclose(f);
     return ret;
 }
