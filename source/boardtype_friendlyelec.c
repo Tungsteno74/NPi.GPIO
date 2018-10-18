@@ -139,7 +139,7 @@ static int getAllwinnerBoardID(char* boardId, int boardIdMaxLen )
 	int ret = -1;
 
 	if (!(f = fopen("/sys/class/sunxi_info/sys_info", "r"))) {
-		LOGE("open /proc/cpuinfo failed.");
+		LOGE("open /sys/class/sunxi_info/sys_info failed.");
 		return -1;
 	}
 
