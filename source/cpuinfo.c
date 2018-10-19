@@ -32,7 +32,7 @@ char *get_cpuinfo_revision(char *revision)
   FILE *fp;
   char buffer[1024];
   char hardware[1024];
-  int  rpi_found = 0;
+  int  npi_found = 0;
 
   if ((fp = fopen("/proc/cpuinfo", "r")) == NULL)
     return 0;
@@ -46,19 +46,19 @@ char *get_cpuinfo_revision(char *revision)
       strcmp(hardware, "Allwinnersun8iFamily") == 0 )
     {
       nanopi_found=1;
-      rpi_found = 1;
+      npi_found = 1;
       //printf("NPAPI: NanoPi!\n");
     }
     sscanf(buffer, "Revision	: %s", revision);
   }
   fclose(fp);
 
-  if (!rpi_found)
+  if (!npi_found)
     revision = NULL;
   return revision;
 }
 
-int get_rpi_revision(void)
+int get_npi_revision(void)
 {
   char revision[1024] = {'\0'};
 
