@@ -149,7 +149,7 @@ PWM_methods[] = {
 
 PyTypeObject PWMType = {
    PyVarObject_HEAD_INIT(NULL,0)
-   "RPi.GPIO.PWM",            // tp_name
+   "NPi.GPIO.PWM",            // tp_name
    sizeof(PWMObject),         // tp_basicsize
    0,                         // tp_itemsize
    (destructor)PWM_dealloc,   // tp_dealloc
