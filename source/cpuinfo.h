@@ -21,5 +21,5 @@ SOFTWARE.
 */
 
 /*
-int get_rpi_revision(void);
+int get_npi_revision(void);
 */
