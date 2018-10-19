@@ -202,7 +202,7 @@ static char *trimwhitespaces(char *str)
   return str;
 }
 
-static int getboardDisplayName(char* boardName, int boardNameMaxLen )
+static int getBoardDisplayName(char* boardName, int boardNameMaxLen )
 {
 	int n,i,j;
 	char lineUntrim[1024], line[1024],*p;
@@ -295,7 +295,7 @@ int getBoardType(BoardHardwareInfo** retBoardInfo) {
     // h3 and h5, check hardware and boardid
 	if (strncasecmp(hardware, h3, strlen(h3)) == 0 || strncasecmp(hardware, h5, strlen(h5)) == 0
 		|| strncasecmp(hardware, h3_kernel4, strlen(h3_kernel4)) == 0 || strncasecmp(hardware, h5_kernel4, strlen(h5_kernel4)) == 0) {
-		int ret = getboardDisplayName(boardDisplayName, sizeof(boardDisplayName));
+		int ret = getBoardDisplayName(boardDisplayName, sizeof(boardDisplayName));
 		if (ret == 0) {
 			//LOGD("got boardid: %s\n", allwinnerBoardID);
 			for (i=0; i<(sizeof(gAllBoardHardwareInfo)/sizeof(BoardHardwareInfo)); i++) {
