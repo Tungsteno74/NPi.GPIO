@@ -29,7 +29,7 @@ SOFTWARE.
 #include "common.h"
 #include "boardtype_friendlyelec.h"
 
-static PyObject *rpi_revision;
+static PyObject *npi_revision;
 static int gpio_warnings = 1;
 
 struct py_callback
@@ -609,7 +609,7 @@ static PyObject *py_setwarnings(PyObject *self, PyObject *args)
 
 static const char moduledocstring[] = "GPIO functionality of a NanoPi using Python";
 
-PyMethodDef rpi_gpio_methods[] = {
+PyMethodDef npi_gpio_methods[] = {
    {"setup", (PyCFunction)py_setup_channel, METH_VARARGS | METH_KEYWORDS, "Set up the GPIO channel, direction and (optional) pull/up down control\nchannel        - either board pin number or BCM number depending on which mode is set.\ndirection      - INPUT or OUTPUT\n[pull_up_down] - PUD_OFF (default), PUD_UP or PUD_DOWN\n[initial]      - Initial value for an output channel"},
    {"cleanup", (PyCFunction)py_cleanup, METH_VARARGS | METH_KEYWORDS, "Clean up by resetting all GPIO channels that have been used by this program to INPUT with no pullup/pulldown and no event detection\n[channel] - individual channel to clean up.  Default - clean every channel that has been used."},
    {"output", py_output_gpio, METH_VARARGS, "Output to a GPIO channel\nchannel - either board pin number or BCM number depending on which mode is set.\nvalue   - 0/1 or False/True or LOW/HIGH"},
@@ -626,12 +626,12 @@ PyMethodDef rpi_gpio_methods[] = {
 };
 
 #if PY_MAJOR_VERSION > 2
-static struct PyModuleDef rpigpiomodule = {
+static struct PyModuleDef npigpiomodule = {
    PyModuleDef_HEAD_INIT,
-   "RPi.GPIO",       // name of module
+   "NPi.GPIO",       // name of module
    moduledocstring,  // module documentation, may be NULL
    -1,               // size of per-interpreter state of the module, or -1 if the module keeps state in global variables.
-   rpi_gpio_methods
+   npi_gpio_methods
 };
 #endif
 
@@ -645,10 +645,10 @@ PyMODINIT_FUNC initGPIO(void)
    PyObject *module = NULL;
 
 #if PY_MAJOR_VERSION > 2
-   if ((module = PyModule_Create(&rpigpiomodule)) == NULL)
+   if ((module = PyModule_Create(&npigpiomodule)) == NULL)
       return NULL;
 #else
-   if ((module = Py_InitModule3("RPi.GPIO", rpi_gpio_methods, moduledocstring)) == NULL)
+   if ((module = Py_InitModule3("NPi.GPIO", npi_gpio_methods, moduledocstring)) == NULL)
       return;
 #endif
 
@@ -694,8 +694,8 @@ PyMODINIT_FUNC initGPIO(void)
        pin_to_gpio = NULL;
     }
 
-   rpi_revision = Py_BuildValue("i", revision);
-   PyModule_AddObject(module, "RPI_REVISION", rpi_revision);
+   npi_revision = Py_BuildValue("i", revision);
+   PyModule_AddObject(module, "NPI_REVISION", npi_revision);
 
    // Add PWM class
    if (PWM_init_PWMType() == NULL)
