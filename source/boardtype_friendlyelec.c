@@ -295,13 +295,13 @@ int getBoardType(BoardHardwareInfo** retBoardInfo) {
     // h3 and h5, check hardware and boardid
 	if (strncasecmp(hardware, h3, strlen(h3)) == 0 || strncasecmp(hardware, h5, strlen(h5)) == 0
 		|| strncasecmp(hardware, h3_kernel4, strlen(h3_kernel4)) == 0 || strncasecmp(hardware, h5_kernel4, strlen(h5_kernel4)) == 0) {
-		int ret = getBoardDisplayName(boardDisplayName, sizeof(boardDisplayName));
+		int ret = getAllwinnerBoardID(allwinnerBoardID, sizeof(allwinnerBoardID));
 		if (ret == 0) {
-			//LOGD("got boardid: %s\n", allwinnerBoardID);
+			LOGD("got boardid: %s\n", allwinnerBoardID);
 			for (i=0; i<(sizeof(gAllBoardHardwareInfo)/sizeof(BoardHardwareInfo)); i++) {
 				//LOGD("\t\t enum, start compare[%d]: %s <--> %s\n", i, gAllBoardHardwareInfo[i].kernelHardware, hardware);
 				if (strncasecmp(gAllBoardHardwareInfo[i].kernelHardware, hardware, strlen(gAllBoardHardwareInfo[i].kernelHardware)) == 0) {
-					if (strncasecmp(gAllBoardHardwareInfo[i].boardDisplayName, boardDisplayName, strlen(gAllBoardHardwareInfo[i].boardDisplayName)) == 0) {
+					if (strncasecmp(gAllBoardHardwareInfo[i].allwinnerBoardID, allwinnerBoardID, strlen(gAllBoardHardwareInfo[i].allwinnerBoardID)) == 0) {
 						if (retBoardInfo != 0) {
 							*retBoardInfo = &gAllBoardHardwareInfo[i];
 						}
@@ -309,6 +309,22 @@ int getBoardType(BoardHardwareInfo** retBoardInfo) {
 					}
 				}
 				//LOGD("\t\t enum, end compare[%d]\n", i);
+		}else{
+			ret = getBoardDisplayName(boardDisplayName, sizeof(boardDisplayName));
+			if (ret == 0) {
+				LOGD("got boardDisplayName: %s\n", boardDisplayName);
+				for (i=0; i<(sizeof(gAllBoardHardwareInfo)/sizeof(BoardHardwareInfo)); i++) {
+					//LOGD("\t\t enum, start compare[%d]: %s <--> %s\n", i, gAllBoardHardwareInfo[i].kernelHardware, hardware);
+					if (strncasecmp(gAllBoardHardwareInfo[i].kernelHardware, hardware, strlen(gAllBoardHardwareInfo[i].kernelHardware)) == 0) {
+						if (strncasecmp(gAllBoardHardwareInfo[i].boardDisplayName, boardDisplayName, strlen(gAllBoardHardwareInfo[i].boardDisplayName)) == 0) {
+							if (retBoardInfo != 0) {
+								*retBoardInfo = &gAllBoardHardwareInfo[i];
+							}
+							return gAllBoardHardwareInfo[i].boardTypeId;
+						}
+					}
+					//LOGD("\t\t enum, end compare[%d]\n", i);
+				}
 			}
 		}
 		return -1;
