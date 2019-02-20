@@ -27,7 +27,7 @@ SOFTWARE.
 int gpio_mode = MODE_UNKNOWN;
 
 // NanoPi NEO/NEO2 
-const int physToGpio_neo [64] ={
+const int physToGpio_neo[64] = {
     -1,
     /* 24 Pin */
     -1, -1,   //1, 2
@@ -60,7 +60,7 @@ const int physToGpio_neo [64] ={
 };
 //
 
-const int physToGpio_m1 [64] ={
+const int physToGpio_m1[64] = {
     -1, // 0
     -1, -1, // 1, 2
     12, -1, // 3, 4
@@ -88,7 +88,7 @@ const int physToGpio_m1 [64] ={
 
 
 // phys pin number to /sys/gpio number
-const int physToGpio_duo [64] ={
+const int physToGpio_duo[64] = {
    -1,        //0
  /* 32 Pin */
    -1, -1,   //1, 2
@@ -124,55 +124,55 @@ const int physToGpio_duo [64] ={
 /*
 const int pinTobcm_BP [64] =	//BCM MODE
 {
-	-1,-1, //map to BCM GPIO0,1
-	53,52, //map to BCM GPIO2,3
-	259,-1, //map to BCM GPIO4,5
-	-1,270, //map to BCM GPIO6,7
-	266,269, //map to BCM GPIO8,9
-	268,267, //map to BCM GPIO10,11
-	-1,-1, //map to BCM GPIO12,13
-	224,225, //map to BCM GPIO14,15
-	-1,275, //map to BCM GPIO16,17
-	226,-1, //map to BCM GPIO18,19
-	-1, -1, //map to BCM GPIO20,21
-	273,244, //map to BCM GPIO22,23
-	245,272, //map to BCM GPIO24,25
-	-1, 274, //map to BCM GPIO26,27
-	
-	-1,-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // 29... 44
-	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, //45... 60
-	-1, -1, -1, -1 // ...63
+    -1,-1, //map to BCM GPIO0,1
+    53,52, //map to BCM GPIO2,3
+    259,-1, //map to BCM GPIO4,5
+    -1,270, //map to BCM GPIO6,7
+    266,269, //map to BCM GPIO8,9
+    268,267, //map to BCM GPIO10,11
+    -1,-1, //map to BCM GPIO12,13
+    224,225, //map to BCM GPIO14,15
+    -1,275, //map to BCM GPIO16,17
+    226,-1, //map to BCM GPIO18,19
+    -1, -1, //map to BCM GPIO20,21
+    273,244, //map to BCM GPIO22,23
+    245,272, //map to BCM GPIO24,25
+    -1, 274, //map to BCM GPIO26,27
+
+    -1,-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // 29... 44
+    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, //45... 60
+    -1, -1, -1, -1 // ...63
 } ;
 */
 
 /*
 const int physToGpioR3 [64] =//head num map to BCMpin
 {
-	-1, // 0
-	-1, -1, // 1, 2
-	2, -1,
-	3, -1,
-	4, 14,
-	-1, 15,
-	17, 18,
-	27, -1,
-	22, 23,
-	-1, 24,
-	10, -1,
-	9, 25,
-	11, 8,
-	-1, 7, // 25, 26
-	
-	0, 1, //27, 28
-	5, -1, //29, 30
-	6, 12, //31, 32
-	13, -1, //33, 34
-	19, 16, //35, 36
-	26, 20, //37, 38
-	-1, 21, //39, 40
-	// Padding:
-	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // ... 56
-	-1, -1, -1, -1, -1, -1, -1, // ... 63
+    -1, // 0
+    -1, -1, // 1, 2
+    2, -1,
+    3, -1,
+    4, 14,
+    -1, 15,
+    17, 18,
+    27, -1,
+    22, 23,
+    -1, 24,
+    10, -1,
+    9, 25,
+    11, 8,
+    -1, 7, // 25, 26
+
+    0, 1, //27, 28
+    5, -1, //29, 30
+    6, 12, //31, 32
+    13, -1, //33, 34
+    19, 16, //35, 36
+    26, 20, //37, 38
+    -1, 21, //39, 40
+    // Padding:
+    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // ... 56
+    -1, -1, -1, -1, -1, -1, -1, // ... 63
 } ;
 */
 
@@ -202,10 +202,10 @@ int check_gpio_priv(void)
 
 int is_valid_raw_port(int channel)
 {
-    if (channel >=   0 && channel <  18) return 1; // PA
-    if (channel >=  32 && channel <  56) return 2; // PB
-    if (channel >=  64 && channel <  89) return 3; // PC
-    if (channel >=  96 && channel < 124) return 4; // PD
+    if (channel >= 0 && channel < 18) return 1; // PA
+    if (channel >= 32 && channel < 56) return 2; // PB
+    if (channel >= 64 && channel < 89) return 3; // PC
+    if (channel >= 96 && channel < 124) return 4; // PD
     if (channel >= 128 && channel < 140) return 5; // PE
     if (channel >= 160 && channel < 166) return 6; // PF
     if (channel >= 192 && channel < 204) return 7; // PG
@@ -217,8 +217,8 @@ int is_valid_raw_port(int channel)
 int get_gpio_number(int channel, unsigned int *gpio)
 {
     // check channel number is in range
-    if ( (gpio_mode == BCM && (channel < 0 || channel > 64))
-      || (gpio_mode == BOARD && (channel < 1 || channel > 64)) )
+    if ((gpio_mode == BCM && (channel < 0 || channel > 64))
+        || (gpio_mode == BOARD && (channel < 1 || channel > 64)))
     {
         PyErr_SetString(PyExc_ValueError, "The channel sent is invalid on a NanoPi");
         return 4;
@@ -227,12 +227,13 @@ int get_gpio_number(int channel, unsigned int *gpio)
     // convert channel to gpio
     if (gpio_mode == BOARD)
     {
-    if (*(*pin_to_gpio+channel) == -1)
+        if (*(*pin_to_gpio + channel) == -1)
         {
             PyErr_SetString(PyExc_ValueError, "The channel sent is invalid on a NanoPi");
             return 5;
-        } else {
-            *gpio = *(*pin_to_gpio+channel);	//pin_to_gpio is initialized in py_gpio.c, the last several lines
+        }
+        else {
+            *gpio = *(*pin_to_gpio + channel);	//pin_to_gpio is initialized in py_gpio.c, the last several lines
         }
     }
     // else if (gpio_mode == BCM)
@@ -247,13 +248,14 @@ int get_gpio_number(int channel, unsigned int *gpio)
             return 5;
         }
         *gpio = channel;
-    } else {
+    }
+    else {
         // setmode() has not been run
         PyErr_SetString(PyExc_RuntimeError, "Please set pin numbering mode using GPIO.setmode(GPIO.BOARD) or GPIO.setmode(GPIO.RAW)");
         return 3;
     }
-    
-	if(nanopiDebug)
-		printf("GPIO = %d\n", *gpio);
+
+    if (nanopiDebug)
+        printf("GPIO = %d\n", *gpio);
     return 0;
 }

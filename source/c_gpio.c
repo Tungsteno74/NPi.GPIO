@@ -57,301 +57,303 @@ static volatile uint32_t *gpio_map;
 
 void short_wait(void)
 {
-	int i;
+    int i;
 
-    for (i=0; i<150; i++)     // wait 150 cycles
+    for (i = 0; i < 150; i++)     // wait 150 cycles
     {
-    	asm volatile("nop");
+        asm volatile("nop");
     }
 }
 
 int setup(void)
 {
-	int mem_fd;
-	uint8_t *gpio_mem;
+    int mem_fd;
+    uint8_t *gpio_mem;
 
-	if ((mem_fd = open("/dev/mem", O_RDWR|O_SYNC) ) < 0)
-	{
-		return SETUP_DEVMEM_FAIL;
-	}
+    if ((mem_fd = open("/dev/mem", O_RDWR | O_SYNC)) < 0)
+    {
+        return SETUP_DEVMEM_FAIL;
+    }
 
-	if ((gpio_mem = malloc(BLOCK_SIZE + (PAGE_SIZE-1))) == NULL)
-		return SETUP_MALLOC_FAIL;
+    if ((gpio_mem = malloc(BLOCK_SIZE + (PAGE_SIZE - 1))) == NULL)
+        return SETUP_MALLOC_FAIL;
 
-	if ((uint32_t)gpio_mem % PAGE_SIZE)
-		gpio_mem += PAGE_SIZE - ((uint32_t)gpio_mem % PAGE_SIZE);
+    if ((uint32_t)gpio_mem % PAGE_SIZE)
+        gpio_mem += PAGE_SIZE - ((uint32_t)gpio_mem % PAGE_SIZE);
 
-	gpio_map = (uint32_t *)mmap( (caddr_t)gpio_mem, BLOCK_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED|MAP_FIXED, mem_fd, GPIO_BASE_BP);
+    gpio_map = (uint32_t *)mmap((caddr_t)gpio_mem, BLOCK_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED | MAP_FIXED, mem_fd, GPIO_BASE_BP);
 
-	if(nanopiDebug)
-		printf("gpio_mem = 0x%x\t gpio_map = 0x%x\n",gpio_mem,gpio_map);
+    if (nanopiDebug)
+        printf("gpio_mem = 0x%x\t gpio_map = 0x%x\n", gpio_mem, gpio_map);
 
-	if ((uint32_t)gpio_map < 0)
-		return SETUP_MMAP_FAIL;
+    if ((uint32_t)gpio_map < 0)
+        return SETUP_MMAP_FAIL;
 
-	return SETUP_OK;
+    return SETUP_OK;
 }
 
 uint32_t readl(uint32_t addr)
 {
-	uint32_t val = 0;
-	uint32_t mmap_base = (addr & ~MAP_MASK);
-	uint32_t mmap_seek = ((addr - mmap_base) >> 2);
-	val = *(gpio_map + mmap_seek);
+    uint32_t val = 0;
+    uint32_t mmap_base = (addr & ~MAP_MASK);
+    uint32_t mmap_seek = ((addr - mmap_base) >> 2);
+    val = *(gpio_map + mmap_seek);
 
-	if(nanopiDebug)
-		printf("mmap_base = 0x%x\t mmap_seek = 0x%x\t gpio_map = 0x%x\t total = 0x%x\n",mmap_base,mmap_seek,gpio_map,(gpio_map + mmap_seek));
+    if (nanopiDebug)
+        printf("mmap_base = 0x%x\t mmap_seek = 0x%x\t gpio_map = 0x%x\t total = 0x%x\n", mmap_base, mmap_seek, gpio_map, (gpio_map + mmap_seek));
 
-	return val;
+    return val;
 }
 
 void writel(uint32_t val, uint32_t addr)
 {
-	uint32_t mmap_base = (addr & ~MAP_MASK);
-	uint32_t mmap_seek = ((addr - mmap_base) >> 2);
-	*(gpio_map + mmap_seek) = val;
+    uint32_t mmap_base = (addr & ~MAP_MASK);
+    uint32_t mmap_seek = ((addr - mmap_base) >> 2);
+    *(gpio_map + mmap_seek) = val;
 }
 
 void clear_event_detect(int gpio)
 {
-	int offset = EVENT_DETECT_OFFSET + (gpio/32);
-	int shift = (gpio%32);
+    int offset = EVENT_DETECT_OFFSET + (gpio / 32);
+    int shift = (gpio % 32);
 
-	if(nanopi_found) {
-		D		return;
-	}
+    if (nanopi_found) {
+        D		return;
+    }
 
-	*(gpio_map+offset) |= (1 << shift);
-	short_wait();
-	*(gpio_map+offset) = 0;
+    *(gpio_map + offset) |= (1 << shift);
+    short_wait();
+    *(gpio_map + offset) = 0;
 }
 
 int eventdetected(int gpio)
 {
-	int offset, value, bit;
+    int offset, value, bit;
 
-	if(nanopi_found) {
-		D		return 0;
-	}
+    if (nanopi_found) {
+        D		return 0;
+    }
 
 
-	offset = EVENT_DETECT_OFFSET + (gpio/32);
-	bit = (1 << (gpio%32));
-	value = *(gpio_map+offset) & bit;
-	if (value)
-	{
-		clear_event_detect(gpio);
-	}
-	return value;
+    offset = EVENT_DETECT_OFFSET + (gpio / 32);
+    bit = (1 << (gpio % 32));
+    value = *(gpio_map + offset) & bit;
+    if (value)
+    {
+        clear_event_detect(gpio);
+    }
+    return value;
 }
 
 void set_rising_event(int gpio, int enable)
 {
-	int offset = RISING_ED_OFFSET + (gpio/32);
-	int shift = (gpio%32);
+    int offset = RISING_ED_OFFSET + (gpio / 32);
+    int shift = (gpio % 32);
 
-	if(nanopi_found) {
-		D		return;
-	}
+    if (nanopi_found) {
+        D		return;
+    }
 
-	if (enable)
-		*(gpio_map+offset) |= 1 << shift;
-	else
-		*(gpio_map+offset) &= ~(1 << shift);
-	clear_event_detect(gpio);
+    if (enable)
+        *(gpio_map + offset) |= 1 << shift;
+    else
+        *(gpio_map + offset) &= ~(1 << shift);
+    clear_event_detect(gpio);
 }
 
 void set_falling_event(int gpio, int enable)
 {
-	int offset = FALLING_ED_OFFSET + (gpio/32);
-	int shift = (gpio%32);
+    int offset = FALLING_ED_OFFSET + (gpio / 32);
+    int shift = (gpio % 32);
 
-	if(nanopi_found) {
-		D		return;
-	}
+    if (nanopi_found) {
+        D		return;
+    }
 
-	if (enable)
-	{
-		*(gpio_map+offset) |= (1 << shift);
-		*(gpio_map+offset) = (1 << shift);
-	} else {
-		*(gpio_map+offset) &= ~(1 << shift);
-	}
-	clear_event_detect(gpio);
+    if (enable)
+    {
+        *(gpio_map + offset) |= (1 << shift);
+        *(gpio_map + offset) = (1 << shift);
+    }
+    else {
+        *(gpio_map + offset) &= ~(1 << shift);
+    }
+    clear_event_detect(gpio);
 }
 
 void set_high_event(int gpio, int enable)
 {
-	int offset = HIGH_DETECT_OFFSET + (gpio/32);
-	int shift = (gpio%32);
+    int offset = HIGH_DETECT_OFFSET + (gpio / 32);
+    int shift = (gpio % 32);
 
-	if(nanopi_found) {
-		D		return;
-	}
+    if (nanopi_found) {
+        D		return;
+    }
 
-	if (enable)
-	{
-		*(gpio_map+offset) |= (1 << shift);
-	} else {
-		*(gpio_map+offset) &= ~(1 << shift);
-	}
-	clear_event_detect(gpio);
+    if (enable)
+    {
+        *(gpio_map + offset) |= (1 << shift);
+    }
+    else {
+        *(gpio_map + offset) &= ~(1 << shift);
+    }
+    clear_event_detect(gpio);
 }
 
 void set_low_event(int gpio, int enable)
 {
-	int offset = LOW_DETECT_OFFSET + (gpio/32);
-	int shift = (gpio%32);
+    int offset = LOW_DETECT_OFFSET + (gpio / 32);
+    int shift = (gpio % 32);
 
-	if(nanopi_found) {
-		D		return;
-	}
+    if (nanopi_found) {
+        D		return;
+    }
 
-	if (enable)
-		*(gpio_map+offset) |= 1 << shift;
-	else
-		*(gpio_map+offset) &= ~(1 << shift);
-	clear_event_detect(gpio);
+    if (enable)
+        *(gpio_map + offset) |= 1 << shift;
+    else
+        *(gpio_map + offset) &= ~(1 << shift);
+    clear_event_detect(gpio);
 }
 
 void set_pullupdn(int gpio, int pud)//void sunxi_pullUpDnControl (int pin, int pud)
 {
-	uint32_t regval = 0;
-	int bank = gpio >> 5;
-	int index = gpio - (bank << 5);
-	int sub = index >> 4;
-	int sub_index = index - 16*sub;
-	 uint32_t phyaddr = SUNXI_GPIO_BASE + (bank * 36) + 0x1c + sub * 4; // +0x10 -> pullUpDn reg
-	 
-	 if (nanopiDebug)
-	 	printf("func:%s pin:%d,bank:%d index:%d sub:%d phyaddr:0x%x\n",__func__, gpio,bank,index,sub,phyaddr); 
+    uint32_t regval = 0;
+    int bank = gpio >> 5;
+    int index = gpio - (bank << 5);
+    int sub = index >> 4;
+    int sub_index = index - 16 * sub;
+    uint32_t phyaddr = SUNXI_GPIO_BASE + (bank * 36) + 0x1c + sub * 4; // +0x10 -> pullUpDn reg
 
-	 regval = readl(phyaddr);
-	 if (nanopiDebug)
-	 	printf("pullUpDn reg:0x%x, pud:0x%x sub_index:%d\n", regval, pud, sub_index);
-	 regval &= ~(3 << (sub_index << 1));
-	 regval |= (pud << (sub_index << 1));
-	 if (nanopiDebug)
-	 	printf("pullUpDn val ready to set:0x%x\n", regval);
-	 writel(regval, phyaddr);
-	 regval = readl(phyaddr);
-	 if (nanopiDebug)
-	 	printf("pullUpDn reg after set:0x%x  addr:0x%x\n", regval, phyaddr);
+    if (nanopiDebug)
+        printf("func:%s pin:%d,bank:%d index:%d sub:%d phyaddr:0x%x\n", __func__, gpio, bank, index, sub, phyaddr);
 
-	 return ;
-	}
+    regval = readl(phyaddr);
+    if (nanopiDebug)
+        printf("pullUpDn reg:0x%x, pud:0x%x sub_index:%d\n", regval, pud, sub_index);
+    regval &= ~(3 << (sub_index << 1));
+    regval |= (pud << (sub_index << 1));
+    if (nanopiDebug)
+        printf("pullUpDn val ready to set:0x%x\n", regval);
+    writel(regval, phyaddr);
+    regval = readl(phyaddr);
+    if (nanopiDebug)
+        printf("pullUpDn reg after set:0x%x  addr:0x%x\n", regval, phyaddr);
+
+    return;
+}
 
 void setup_gpio(int gpio, int direction, int pud)//void sunxi_set_gpio_mode(int pin,int mode)
 {
-	uint32_t regval = 0;
-	int bank = gpio >> 5;
-	int index = gpio - (bank << 5);
-	int offset = ((index - ((index >> 3) << 3)) << 2);
-	uint32_t phyaddr = SUNXI_GPIO_BASE + (bank * 36) + ((index >> 3) << 2);
-	if (nanopiDebug)
-		printf("func:%s pin:%d, direction:%d bank:%d index:%d phyaddr:0x%x\n",__func__, gpio , direction,bank,index,phyaddr); 
+    uint32_t regval = 0;
+    int bank = gpio >> 5;
+    int index = gpio - (bank << 5);
+    int offset = ((index - ((index >> 3) << 3)) << 2);
+    uint32_t phyaddr = SUNXI_GPIO_BASE + (bank * 36) + ((index >> 3) << 2);
+    if (nanopiDebug)
+        printf("func:%s pin:%d, direction:%d bank:%d index:%d phyaddr:0x%x\n", __func__, gpio, direction, bank, index, phyaddr);
 
-	regval = readl(phyaddr);
-	if (nanopiDebug)
-		printf("read reg val: 0x%x offset:%d\n",regval,offset);
+    regval = readl(phyaddr);
+    if (nanopiDebug)
+        printf("read reg val: 0x%x offset:%d\n", regval, offset);
 
-	set_pullupdn(gpio, pud);
+    set_pullupdn(gpio, pud);
 
-	if(INPUT == direction)
-	{
-		regval &= ~(7 << offset);
-		writel(regval, phyaddr);
-		regval = readl(phyaddr);
-		if (nanopiDebug)
-			printf("Input mode set over reg val: 0x%x\n",regval);
-	}
-	else if(OUTPUT == direction)
-	{
-		regval &= ~(7 << offset);
-		regval |=  (1 << offset);
-		if (nanopiDebug)
-			printf("Out mode ready set val: 0x%x\n",regval);
-		writel(regval, phyaddr);
-		regval = readl(phyaddr);
-		if (nanopiDebug)
-			printf("Out mode set over reg val: 0x%x\n",regval);
-	}
-	else
-	{
-		printf("line:%dpin number error\n",__LINE__);
-	} 
+    if (INPUT == direction)
+    {
+        regval &= ~(7 << offset);
+        writel(regval, phyaddr);
+        regval = readl(phyaddr);
+        if (nanopiDebug)
+            printf("Input mode set over reg val: 0x%x\n", regval);
+    }
+    else if (OUTPUT == direction)
+    {
+        regval &= ~(7 << offset);
+        regval |= (1 << offset);
+        if (nanopiDebug)
+            printf("Out mode ready set val: 0x%x\n", regval);
+        writel(regval, phyaddr);
+        regval = readl(phyaddr);
+        if (nanopiDebug)
+            printf("Out mode set over reg val: 0x%x\n", regval);
+    }
+    else
+    {
+        printf("line:%dpin number error\n", __LINE__);
+    }
 }
 
 // Contribution by Eric Ptak <trouch@trouch.com>
 int gpio_function(int gpio)
 {
-	uint32_t regval = 0;
-	int bank = gpio >> 5;
-	int index = gpio - (bank << 5);
-	int offset = ((index - ((index >> 3) << 3)) << 2);
-	uint32_t phyaddr = SUNXI_GPIO_BASE + (bank * 36) + ((index >> 3) << 2);
+    uint32_t regval = 0;
+    int bank = gpio >> 5;
+    int index = gpio - (bank << 5);
+    int offset = ((index - ((index >> 3) << 3)) << 2);
+    uint32_t phyaddr = SUNXI_GPIO_BASE + (bank * 36) + ((index >> 3) << 2);
 
-	regval = readl(phyaddr);
-	if (nanopiDebug)
-		printf("read reg val: 0x%x offset:%d\n",regval,offset);
+    regval = readl(phyaddr);
+    if (nanopiDebug)
+        printf("read reg val: 0x%x offset:%d\n", regval, offset);
 
-	regval >>= offset;
-	regval &= 7;
-	if (nanopiDebug)
-		printf("read reg val: 0x%x\n",regval);
-	return regval;// 1=input, 0=output, 4=alt0
+    regval >>= offset;
+    regval &= 7;
+    if (nanopiDebug)
+        printf("read reg val: 0x%x\n", regval);
+    return regval;// 1=input, 0=output, 4=alt0
 }
 
 void output_gpio(int gpio, int value)//void sunxi_digitalWrite(int pin, int value)
-{   
-	uint32_t regval = 0;
-	int bank = gpio >> 5;
-	int index = gpio - (bank << 5);
-	uint32_t phyaddr = SUNXI_GPIO_BASE + (bank * 36) + 0x10; // +0x10 -> data reg
-	if (nanopiDebug)
-		printf("func:%s pin:%d, value:%d bank:%d index:%d phyaddr:0x%x\n",__func__, gpio , value,bank,index,phyaddr);
-	
-	regval = readl(phyaddr);
-	if (nanopiDebug)
-		printf("before write reg val: 0x%x,index:%d\n",regval,index);
-	if(0 == value)
-	{
-		regval &= ~(1 << index);
-		writel(regval, phyaddr);
-		regval = readl(phyaddr);
-		if (nanopiDebug)
-			printf("LOW val set over reg val: 0x%x\n",regval);
-	}
-	else
-	{
-		regval |= (1 << index);
-		writel(regval, phyaddr);
-		regval = readl(phyaddr);
-		if (nanopiDebug)
-			printf("HIGH val set over reg val: 0x%x\n",regval);
-	}	
+{
+    uint32_t regval = 0;
+    int bank = gpio >> 5;
+    int index = gpio - (bank << 5);
+    uint32_t phyaddr = SUNXI_GPIO_BASE + (bank * 36) + 0x10; // +0x10 -> data reg
+    if (nanopiDebug)
+        printf("func:%s pin:%d, value:%d bank:%d index:%d phyaddr:0x%x\n", __func__, gpio, value, bank, index, phyaddr);
+
+    regval = readl(phyaddr);
+    if (nanopiDebug)
+        printf("before write reg val: 0x%x,index:%d\n", regval, index);
+    if (0 == value)
+    {
+        regval &= ~(1 << index);
+        writel(regval, phyaddr);
+        regval = readl(phyaddr);
+        if (nanopiDebug)
+            printf("LOW val set over reg val: 0x%x\n", regval);
+    }
+    else
+    {
+        regval |= (1 << index);
+        writel(regval, phyaddr);
+        regval = readl(phyaddr);
+        if (nanopiDebug)
+            printf("HIGH val set over reg val: 0x%x\n", regval);
+    }
 }
 
 int input_gpio(int gpio)//int sunxi_digitalRead(int pin)
 {
 
-	uint32_t regval = 0;
-	int bank = gpio >> 5;
-	int index = gpio - (bank << 5);
-	 uint32_t phyaddr = SUNXI_GPIO_BASE + (bank * 36) + 0x10; // +0x10 -> data reg
-	 if (nanopiDebug)
-	 	printf("func:%s pin:%d,bank:%d index:%d phyaddr:0x%x\n",__func__, gpio,bank,index,phyaddr); 
+    uint32_t regval = 0;
+    int bank = gpio >> 5;
+    int index = gpio - (bank << 5);
+    uint32_t phyaddr = SUNXI_GPIO_BASE + (bank * 36) + 0x10; // +0x10 -> data reg
+    if (nanopiDebug)
+        printf("func:%s pin:%d,bank:%d index:%d phyaddr:0x%x\n", __func__, gpio, bank, index, phyaddr);
 
-	 regval = readl(phyaddr);
-	 regval = regval >> index;
-	 regval &= 1;
-	 if (nanopiDebug)
-	 	printf("***** read reg val: 0x%x,bank:%d,index:%d,line:%d\n",regval,bank,index,__LINE__);
-	 return regval;
+    regval = readl(phyaddr);
+    regval = regval >> index;
+    regval &= 1;
+    if (nanopiDebug)
+        printf("***** read reg val: 0x%x,bank:%d,index:%d,line:%d\n", regval, bank, index, __LINE__);
+    return regval;
 }
 
 void cleanup(void)
 {
     // fixme - set all gpios back to input
-	munmap((caddr_t)gpio_map, BLOCK_SIZE);
+    munmap((caddr_t)gpio_map, BLOCK_SIZE);
 }
