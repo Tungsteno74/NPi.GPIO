@@ -1,3 +1,4 @@
+from __future__ import print_function
 import NPi.GPIO as GPIO
 
 validPins = [11,12,13,15]
