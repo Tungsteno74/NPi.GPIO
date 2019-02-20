@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from __future__ import print_function
 import NPi.GPIO as GPIO
 import time
 PIN_NUM = 7
