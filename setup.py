@@ -34,7 +34,7 @@ classifiers = ['Development Status :: 5 - Production/Stable',
                'Topic :: System :: Hardware']
 
 setup(name             = 'NPi.GPIO',
-      version          = '0.5.81',
+      version          = '0.5.8.1',
       author           = 'Tungsteno',
       author_email     = 'contacts00-npigpio@yahoo.it',
       description      = 'A module to control NanoPi GPIO channels',
@@ -44,4 +44,4 @@ setup(name             = 'NPi.GPIO',
       url              = 'https://github.com/Tungsteno74/NPi.GPIO',
       classifiers      = classifiers,
       packages         = ['NPi'],
-      ext_modules      = [Extension('NPi.GPIO', ['source/py_gpio.c', 'source/c_gpio.c', 'source/cpuinfo.c', 'source/event_gpio.c', 'source/soft_pwm.c', 'source/py_pwm.c', 'source/common.c', 'source/constants.c', 'source/boardtype_friendlyelec.c' ])])
+      ext_modules      = [Extension('NPi.GPIO', ['source/py_gpio.c', 'source/c_gpio.c', 'source/cpuinfo.c', 'source/event_gpio.c', 'source/soft_pwm.c', 'source/py_pwm.c', 'source/common.c', 'source/constants.c', 'source/boardtype_friendlyelec.c'])])
