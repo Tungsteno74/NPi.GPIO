@@ -19,29 +19,32 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
+__version__='0.5.8.1'
+from setuptools import setup, Extension
 
-from distutils.core import setup, Extension
-
-classifiers = ['Development Status :: 5 - Production/Stable',
-               'Operating System :: POSIX :: Linux',
-               'License :: OSI Approved :: MIT License',
-               'Intended Audience :: Developers',
-               'Programming Language :: Python :: 2.6',
-               'Programming Language :: Python :: 2.7',
-               'Programming Language :: Python :: 3',
-               'Topic :: Software Development',
-               'Topic :: Home Automation',
-               'Topic :: System :: Hardware']
+classifiers = """\
+Development Status :: 5 - Production/Stable
+Operating System :: POSIX :: Linux
+License :: OSI Approved :: MIT License
+Intended Audience :: Developers
+Programming Language :: Python :: 2.6
+Programming Language :: Python :: 2.7
+Programming Language :: Python :: 3
+Topic :: Software Development
+Topic :: Home Automation
+Topic :: System :: Hardware
+"""
 
 setup(name             = 'NPi.GPIO',
-      version          = '0.5.8.1',
+      version          = __version__,
       author           = 'Tungsteno',
       author_email     = 'contacts00-npigpio@yahoo.it',
       description      = 'A module to control NanoPi GPIO channels',
-      long_description = open('CHANGELOG.txt').read(),
+      long_description = open('README.md').read(),
       license          = 'MIT',
       keywords         = 'NanoPi GPIO',
       url              = 'https://github.com/Tungsteno74/NPi.GPIO',
-      classifiers      = classifiers,
+      classifiers      = list(filter(None, classifiers.split('\n'))),
       packages         = ['NPi'],
       ext_modules      = [Extension('NPi.GPIO', ['source/py_gpio.c', 'source/c_gpio.c', 'source/cpuinfo.c', 'source/event_gpio.c', 'source/soft_pwm.c', 'source/py_pwm.c', 'source/common.c', 'source/constants.c', 'source/boardtype_friendlyelec.c'])])
+      data_files       = [('Lib/site-packages/NPi.GPIO', [ 'LICENSE', 'README.md', 'CHANGELOG.txt'])],
