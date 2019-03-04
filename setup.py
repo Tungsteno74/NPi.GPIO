@@ -35,6 +35,7 @@ Topic :: Home Automation
 Topic :: System :: Hardware
 """
 
+import os
 from setuptools import setup, Extension
 
 file_path = os.path.realpath(os.path.dirname(__file__))
