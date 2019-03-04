@@ -20,7 +20,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-__version__ = '0.5.8.1.dev1'
+__version__ = '0.5.8.1.dev3'
 
 classifiers = """\
 Development Status :: 5 - Production/Stable
@@ -62,7 +62,7 @@ setup(name             = 'NPi.GPIO',
       author           = 'Tungsteno',
       author_email     = 'contacts00-npigpio@yahoo.it',
       description      = 'A module to control NanoPi GPIO channels',
-      long_description = open('README.md').read(),
+      long_description = __long_desc__,
       license          = 'MIT',
       keywords         = 'NanoPi GPIO',
       url              = 'https://github.com/Tungsteno74/NPi.GPIO',
