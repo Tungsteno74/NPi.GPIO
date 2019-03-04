@@ -19,7 +19,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
-__version__='0.5.8.1'
+__version__ = '0.5.8.1.dev0'
 from setuptools import setup, Extension
 
 classifiers = """\
@@ -47,5 +47,4 @@ setup(name             = 'NPi.GPIO',
       classifiers      = list(filter(None, classifiers.split('\n'))),
       packages         = ['NPi'],
       ext_modules      = [Extension('NPi.GPIO', ['source/py_gpio.c', 'source/c_gpio.c', 'source/cpuinfo.c', 'source/event_gpio.c', 'source/soft_pwm.c', 'source/py_pwm.c', 'source/common.c', 'source/constants.c', 'source/boardtype_friendlyelec.c'])],
-      data_files       = [('Lib/site-packages/NPi.GPIO', [ 'LICENSE', 'README.md', 'CHANGELOG.txt'])],
-     )
+      data_files       = [('Lib/site-packages/NPi.GPIO', ['LICENSE', 'README.md', 'CHANGELOG.txt'])],)
