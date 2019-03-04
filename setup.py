@@ -53,7 +53,7 @@ try:
     __long_desc__ = pypandoc.convert_text(file_cont,'rst',format='md',extra_args=['--wrap=preserve'])
 except ImportError:
     print "skipping README conversion..."
-    __long_desc__ = long_desc
+    __long_desc__ = file_cont
 
 
 
