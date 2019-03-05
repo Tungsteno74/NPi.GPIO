@@ -20,7 +20,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-__version__ = '0.5.8.1.dev3'
+__version__ = '0.5.8.1.dev4'
 
 classifiers = """\
 Development Status :: 5 - Production/Stable
@@ -35,34 +35,15 @@ Topic :: Home Automation
 Topic :: System :: Hardware
 """
 
-import os
 from setuptools import setup, Extension
-
-file_path = os.path.realpath(os.path.dirname(__file__))
-
-readme_path = file_path
-readme_md, readme_rst = 'README.md', 'README.rst'
-
-#extract description paragraph from README.md
-with open(os.path.join(readme_path,readme_md), 'r') as file:
-    file_cont = file.read()
-
-try:
-    import pypandoc
-    print "converting README from markdown to restructuredtext..."
-    __long_desc__ = pypandoc.convert_text(file_cont,'rst',format='md',extra_args=['--wrap=preserve'])
-except ImportError:
-    print "skipping README conversion..."
-    __long_desc__ = file_cont
-
-
 
 setup(name             = 'NPi.GPIO',
       version          = __version__,
       author           = 'Tungsteno',
       author_email     = 'contacts00-npigpio@yahoo.it',
       description      = 'A module to control NanoPi GPIO channels',
-      long_description = __long_desc__,
+      long_description = open('README.md').read(),
+      long_description_content_type = "text/markdown",
       license          = 'MIT',
       keywords         = 'NanoPi GPIO',
       url              = 'https://github.com/Tungsteno74/NPi.GPIO',
