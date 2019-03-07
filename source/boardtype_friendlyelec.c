@@ -39,7 +39,7 @@ BoardHardwareInfo gAllBoardHardwareInfo[] = {
     {"sun8i", 0, NanoPi_Duo, "NanoPi-Duo", "4(0)"},
     {"sun8i", 0, NanoPi_NEO_Core, "NanoPi-NEO-Core", "5(0)"},
     // kernel 4.x
-{"Allwinnersun8iFamily", 0, NanoPi_M1, "NanoPi-M1", "0(0)"},
+    {"Allwinnersun8iFamily", 0, NanoPi_M1, "NanoPi-M1", "0(0)"},
     {"Allwinnersun8iFamily", 0, NanoPi_NEO, "NanoPi-NEO", "1(0)"},
     {"Allwinnersun8iFamily", 0, NanoPi_NEO_Air, "NanoPi-NEO-Air", "2(0)"},
     {"Allwinnersun8iFamily", 0, NanoPi_M1_Plus, "NanoPi-M1-Plus", "3(0)"},
@@ -215,11 +215,11 @@ static int getBoardDisplayName(char* boardName, int boardNameMaxLen)
     int ret = -1;
 
     if (!(f = fopen("/etc/friendlyelec-release", "r"))) {
-        LOGE("open /etc/friendlyelec-release failed. Will try an alternative.")
-            if (!(f == fopen("/etc/armbian-release", "r") {
-                LOGE("open /etc/armbian-release failed.");
-                return -1;
-            }
+        LOGE("open /etc/friendlyelec-release failed. Will try an alternative.");
+        if (!(f == fopen("/etc/armbian-release", "r"))) {
+            LOGE("open /etc/armbian-release failed.");
+            return -1;
+        }
     }
 
     while (!feof(f)) {
@@ -237,7 +237,7 @@ static int getBoardDisplayName(char* boardName, int boardNameMaxLen)
                 if (lineUntrim[i] == '"' || lineUntrim[i] == '\t' || lineUntrim[i] == '\r' || lineUntrim[i] == '\n') {
                 }
                 else {
-                    line[j++] = (lineUntrim[i] == '') ? '-' : lineUntrim[i];
+                    line[j++] = (lineUntrim[i] == ' ') ? '-' : lineUntrim[i];
                 }
             }
             line[j] = 0x00;
@@ -263,7 +263,8 @@ static int getBoardDisplayName(char* boardName, int boardNameMaxLen)
     return ret;
 }
 
-int getBoardType(BoardHardwareInfo** retBoardInfo) {
+int getBoardType(BoardHardwareInfo** retBoardInfo)
+{
     char hardware[255];
     char revision[255];
     char boardDisplayName[255];
@@ -353,9 +354,7 @@ int getBoardType(BoardHardwareInfo** retBoardInfo) {
     // other, check hardware and revision
     for (i = 0; i < (sizeof(gAllBoardHardwareInfo) / sizeof(BoardHardwareInfo)); i++) {
         if (strncasecmp(gAllBoardHardwareInfo[i].kernelHardware, hardware, strlen(gAllBoardHardwareInfo[i].kernelHardware)) == 0) {
-            if (gAllBoardHardwareInfo[i].kernelRevision == -1
-                || gAllBoardHardwareInfo[i].kernelRevision == iRev
-                ) {
+            if (gAllBoardHardwareInfo[i].kernelRevision == -1 || gAllBoardHardwareInfo[i].kernelRevision == iRev) {
                 if (retBoardInfo != 0) {
                     *retBoardInfo = &gAllBoardHardwareInfo[i];
                 }
