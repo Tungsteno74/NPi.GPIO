@@ -209,7 +209,7 @@ static char *trimwhitespaces(char *str)
 static int getBoardDisplayName(char* boardName, int boardNameMaxLen)
 {
     int n, i, j;
-    char lineUntrim[1024], line[1024], *p;
+    char lineUntrim[1024], line[1024], *lineNoSpaces, *p;
     const char* release_board_name_fieldname = "BOARD_NAME";
     FILE *f;
     int ret = -1;
@@ -230,14 +230,14 @@ static int getBoardDisplayName(char* boardName, int boardNameMaxLen)
             j = 0;
 
             // Trim leading and traling spaces
-            lineUntrim = trimwhitespaces(lineUntrim);
+            lineNoSpaces = trimwhitespaces(lineUntrim);
 
             // Substitute inner spaces with dashes "-" and remove not alphanumeric chars
-            for (i = 0; i < strlen(lineUntrim); i++) {
-                if (lineUntrim[i] == '"' || lineUntrim[i] == '\t' || lineUntrim[i] == '\r' || lineUntrim[i] == '\n') {
+            for (i = 0; i < strlen(lineNoSpaces); i++) {
+                if (lineNoSpaces[i] == '"' || lineNoSpaces[i] == '\t' || lineNoSpaces[i] == '\r' || lineNoSpaces[i] == '\n') {
                 }
                 else {
-                    line[j++] = (lineUntrim[i] == ' ') ? '-' : lineUntrim[i];
+                    line[j++] = (lineNoSpaces[i] == ' ') ? '-' : lineNoSpaces[i];
                 }
             }
             line[j] = 0x00;
