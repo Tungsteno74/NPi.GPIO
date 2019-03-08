@@ -5,9 +5,13 @@ try:
     import NPi.GPIO as GPIO
 except RuntimeError:
     print("Error importing GPIO modules! This is probably because you need superuser privileges. You can achieve this by using 'sudo' to run your script")
-    sys.exit(-1)
-    
+    sys.exit(-1)  
 import time
+
+try:
+    input = raw_input
+except NameError:
+    pass
 
 print("Inizializing...\n")
 range_pins = [3,24] #range of board GPIO pins to check
@@ -22,15 +26,15 @@ time.sleep(0.2)
 #print "Board revision:"
 #print GPIO.RPI_INFO
 #print GPIO.RPI_REVISION
-print("\nRPi.GPIO version:")
+print("\nNPi.GPIO version:")
 print(GPIO.VERSION)
 
 time.sleep(1)
            
 while True:
     try:
-        pin = int(raw_input('Choose board pin number: \n( 3 - 24; excluded: 4, 6, 9, 14, 17, 20 )\n'))
-        mode = int(raw_input('Choose pin state: \n( 0 - Low, 1 - High, 2 - Quit )\n'))
+        pin = int(input('Choose board pin number: \n( 3 - 24; excluded: 4, 6, 9, 14, 17, 20 )\n'))
+        mode = int(input('Choose pin state: \n( 0 - Low, 1 - High, 2 - Quit )\n'))
         print("\n\nChoosen %d (state %s)\n" % (mode, v_modes_str[mode]))
         GPIO.setup(pin, GPIO.OUT)
         GPIO.output(pin, mode)
