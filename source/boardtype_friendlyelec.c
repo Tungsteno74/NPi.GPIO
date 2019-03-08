@@ -141,7 +141,7 @@ static int getAllwinnerBoardID(char* boardId, int boardIdMaxLen)
     int ret = -1;
 
     if (!(f = fopen("/sys/class/sunxi_info/sys_info", "r"))) {
-        LOGE("open /sys/class/sunxi_info/sys_info failed.");
+        LOGE("open /sys/class/sunxi_info/sys_info failed.\n");
         return -1;
     }
 
@@ -215,9 +215,9 @@ static int getBoardDisplayName(char* boardName, int boardNameMaxLen)
     int ret = -1;
 
     if (!(f = fopen("/etc/friendlyelec-release", "r"))) {
-        LOGE("open /etc/friendlyelec-release failed. Will try an alternative.");
-        if (!(f == fopen("/etc/armbian-release", "r"))) {
-            LOGE("open /etc/armbian-release failed.");
+        LOGE("open /etc/friendlyelec-release failed. Will try an alternative.\n");
+        if (!(f = fopen("/etc/armbian-release", "r"))) {
+            LOGE("open /etc/armbian-release failed.\n");
             return -1;
         }
     }
