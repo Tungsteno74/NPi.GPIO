@@ -17,6 +17,6 @@ while switchcount < 2:
         switchcount += 1
         print('Button pressed',switchcount)
         print("\n value_%d = %d\n" %(SWITCH_PIN,GPIO.input(SWITCH_PIN)))
-		
+        
 
 GPIO.remove_event_detect(SWITCH_PIN)
