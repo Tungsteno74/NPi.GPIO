@@ -39,7 +39,7 @@ BoardHardwareInfo gAllBoardHardwareInfo[] = {
     {"sun8i", 0, NanoPi_Duo, "NanoPi-Duo", "4(0)"},
     {"sun8i", 0, NanoPi_NEO_Core, "NanoPi-NEO-Core", "5(0)"},
     // kernel 4.x
-{"Allwinnersun8iFamily", 0, NanoPi_M1, "NanoPi-M1", "0(0)"},
+    {"Allwinnersun8iFamily", 0, NanoPi_M1, "NanoPi-M1", "0(0)"},
     {"Allwinnersun8iFamily", 0, NanoPi_NEO, "NanoPi-NEO", "1(0)"},
     {"Allwinnersun8iFamily", 0, NanoPi_NEO_Air, "NanoPi-NEO-Air", "2(0)"},
     {"Allwinnersun8iFamily", 0, NanoPi_M1_Plus, "NanoPi-M1-Plus", "3(0)"},
@@ -141,7 +141,7 @@ static int getAllwinnerBoardID(char* boardId, int boardIdMaxLen)
     int ret = -1;
 
     if (!(f = fopen("/sys/class/sunxi_info/sys_info", "r"))) {
-        LOGE("open /sys/class/sunxi_info/sys_info failed.");
+        LOGE("open /sys/class/sunxi_info/sys_info failed.\n");
         return -1;
     }
 
@@ -209,17 +209,17 @@ static char *trimwhitespaces(char *str)
 static int getBoardDisplayName(char* boardName, int boardNameMaxLen)
 {
     int n, i, j;
-    char lineUntrim[1024], line[1024], *p;
+    char lineUntrim[1024], line[1024], *lineNoSpaces, *p;
     const char* release_board_name_fieldname = "BOARD_NAME";
     FILE *f;
     int ret = -1;
 
     if (!(f = fopen("/etc/friendlyelec-release", "r"))) {
-        LOGE("open /etc/friendlyelec-release failed. Will try an alternative.")
-            if (!(f == fopen("/etc/armibian-release", "r") {
-                LOGE("open /etc/armbian-release failed.");
-                return -1;
-            }
+        LOGE("open /etc/friendlyelec-release failed. Will try an alternative.\n");
+        if (!(f = fopen("/etc/armbian-release", "r"))) {
+            LOGE("open /etc/armbian-release failed.\n");
+            return -1;
+        }
     }
 
     while (!feof(f)) {
@@ -230,14 +230,14 @@ static int getBoardDisplayName(char* boardName, int boardNameMaxLen)
             j = 0;
 
             // Trim leading and traling spaces
-            lineUntrim = trimwhitespaces(lineUntrim);
+            lineNoSpaces = trimwhitespaces(lineUntrim);
 
             // Substitute inner spaces with dashes "-" and remove not alphanumeric chars
-            for (i = 0; i < strlen(lineUntrim); i++) {
-                if (lineUntrim[i] == '"' || lineUntrim[i] == '\t' || lineUntrim[i] == '\r' || lineUntrim[i] == '\n') {
+            for (i = 0; i < strlen(lineNoSpaces); i++) {
+                if (lineNoSpaces[i] == '"' || lineNoSpaces[i] == '\t' || lineNoSpaces[i] == '\r' || lineNoSpaces[i] == '\n') {
                 }
                 else {
-                    line[j++] = (lineUntrim[i] == '') ? '-' : lineUntrim[i];
+                    line[j++] = (lineNoSpaces[i] == ' ') ? '-' : lineNoSpaces[i];
                 }
             }
             line[j] = 0x00;
@@ -263,10 +263,12 @@ static int getBoardDisplayName(char* boardName, int boardNameMaxLen)
     return ret;
 }
 
-int getBoardType(BoardHardwareInfo** retBoardInfo) {
+int getBoardType(BoardHardwareInfo** retBoardInfo)
+{
     char hardware[255];
     char revision[255];
     char boardDisplayName[255];
+    char allwinnerBoardID[255];
     int ret;
     int i;
     memset(hardware, 0, sizeof(hardware));
@@ -304,7 +306,7 @@ int getBoardType(BoardHardwareInfo** retBoardInfo) {
         || strncasecmp(hardware, h3_kernel4, strlen(h3_kernel4)) == 0 || strncasecmp(hardware, h5_kernel4, strlen(h5_kernel4)) == 0) {
         int ret = getAllwinnerBoardID(allwinnerBoardID, sizeof(allwinnerBoardID));
         if (ret == 0) {
-            LOGD("got boardid: %s\n", allwinnerBoardID);
+            //LOGD("got boardid: %s\n", allwinnerBoardID);
             for (i = 0; i < (sizeof(gAllBoardHardwareInfo) / sizeof(BoardHardwareInfo)); i++) {
                 //LOGD("\t\t enum, start compare[%d]: %s <--> %s\n", i, gAllBoardHardwareInfo[i].kernelHardware, hardware);
                 if (strncasecmp(gAllBoardHardwareInfo[i].kernelHardware, hardware, strlen(gAllBoardHardwareInfo[i].kernelHardware)) == 0) {
@@ -317,10 +319,11 @@ int getBoardType(BoardHardwareInfo** retBoardInfo) {
                 }
                 //LOGD("\t\t enum, end compare[%d]\n", i);
             }
+        }
         else {
             ret = getBoardDisplayName(boardDisplayName, sizeof(boardDisplayName));
             if (ret == 0) {
-                LOGD("got boardDisplayName: %s\n", boardDisplayName);
+                //LOGD("got boardDisplayName: %s\n", boardDisplayName);
                 for (i = 0; i < (sizeof(gAllBoardHardwareInfo) / sizeof(BoardHardwareInfo)); i++) {
                     //LOGD("\t\t enum, start compare[%d]: %s <--> %s\n", i, gAllBoardHardwareInfo[i].kernelHardware, hardware);
                     if (strncasecmp(gAllBoardHardwareInfo[i].kernelHardware, hardware, strlen(gAllBoardHardwareInfo[i].kernelHardware)) == 0) {
@@ -336,45 +339,43 @@ int getBoardType(BoardHardwareInfo** retBoardInfo) {
             }
         }
         return -1;
-        }
+    }
 
-        if (strlen(revision) == 0) {
-            //LOGD("failed, revision is empty.");
-            return -1;
-        }
-
-        char revision2[255];
-        sprintf(revision2, "0x%s", revision);
-        int iRev;
-        iRev = strtol(revision2, NULL, 16);
-
-        // other, check hardware and revision
-        for (i = 0; i < (sizeof(gAllBoardHardwareInfo) / sizeof(BoardHardwareInfo)); i++) {
-            if (strncasecmp(gAllBoardHardwareInfo[i].kernelHardware, hardware, strlen(gAllBoardHardwareInfo[i].kernelHardware)) == 0) {
-                if (gAllBoardHardwareInfo[i].kernelRevision == -1
-                    || gAllBoardHardwareInfo[i].kernelRevision == iRev
-                    ) {
-                    if (retBoardInfo != 0) {
-                        *retBoardInfo = &gAllBoardHardwareInfo[i];
-                    }
-                    return gAllBoardHardwareInfo[i].boardTypeId;
-                }
-            }
-        }
+    if (strlen(revision) == 0) {
+        //LOGD("failed, revision is empty.");
         return -1;
     }
 
-    /*
-    int main() {
-        BoardHardwareInfo* retBoardInfo;
-        int boardId;
-        boardId = getBoardType(&retBoardInfo);
-        if (boardId >= 0) {
-            printf("boardName:%s,boardId:%d\n", retBoardInfo->boardDisplayName, boardId);
-        } else {
-            printf("%s, ret:%d\n", "failed", boardId);
-        }
+    char revision2[255];
+    sprintf(revision2, "0x%s", revision);
+    int iRev;
+    iRev = strtol(revision2, NULL, 16);
 
-        return 0;
+    // other, check hardware and revision
+    for (i = 0; i < (sizeof(gAllBoardHardwareInfo) / sizeof(BoardHardwareInfo)); i++) {
+        if (strncasecmp(gAllBoardHardwareInfo[i].kernelHardware, hardware, strlen(gAllBoardHardwareInfo[i].kernelHardware)) == 0) {
+            if (gAllBoardHardwareInfo[i].kernelRevision == -1 || gAllBoardHardwareInfo[i].kernelRevision == iRev) {
+                if (retBoardInfo != 0) {
+                    *retBoardInfo = &gAllBoardHardwareInfo[i];
+                }
+                return gAllBoardHardwareInfo[i].boardTypeId;
+            }
+        }
     }
-    */
+    return -1;
+}
+
+/*
+int main() {
+    BoardHardwareInfo* retBoardInfo;
+    int boardId;
+    boardId = getBoardType(&retBoardInfo);
+    if (boardId >= 0) {
+        printf("boardName:%s,boardId:%d\n", retBoardInfo->boardDisplayName, boardId);
+    } else {
+        printf("%s, ret:%d\n", "failed", boardId);
+    }
+
+    return 0;
+}
+*/
