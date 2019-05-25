@@ -215,9 +215,8 @@ static int getBoardDisplayName(char* boardName, int boardNameMaxLen)
     int ret = -1;
 
     if (!(f = fopen("/etc/friendlyelec-release", "r"))) {
-        LOGE("open /etc/friendlyelec-release failed. Will try an alternative.\n");
         if (!(f = fopen("/etc/armbian-release", "r"))) {
-            LOGE("open /etc/armbian-release failed.\n");
+            LOGE("open /etc/friendlyelec-release or /etc/armbian-release failed.\n");
             return -1;
         }
     }
