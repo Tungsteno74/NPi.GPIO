@@ -20,8 +20,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-__version__ = '0.5.8.4'
-
 classifiers = """\
 Development Status :: 5 - Production/Stable
 Operating System :: POSIX :: Linux
@@ -34,10 +32,20 @@ Topic :: Home Automation
 Topic :: System :: Hardware
 """
 
+import io
 from setuptools import setup, Extension
 
+here = os.path.abspath(os.path.dirname(__file__))
+
+def readall(*args):
+    with io.open(os.path.join(here, *args), encoding='utf8') as fp:
+        return fp.read()
+
+metadata = dict(re.findall(r"""__([a-z]+)__ = "([^"]+)""", readall('NPi', '__init__.py')))
+
+
 setup(name             = 'NPi.GPIO',
-      version          = __version__,
+      version          = metadata['version'],
       author           = 'Tungsteno',
       author_email     = 'contacts00-npigpio@yahoo.it',
       description      = 'A module to control NanoPi GPIO channels',
@@ -48,5 +56,8 @@ setup(name             = 'NPi.GPIO',
       url              = 'https://github.com/Tungsteno74/NPi.GPIO',
       classifiers      = list(filter(None, classifiers.split('\n'))),
       packages         = ['NPi'],
-      ext_modules      = [Extension('NPi.GPIO', ['source/py_gpio.c', 'source/c_gpio.c', 'source/cpuinfo.c', 'source/event_gpio.c', 'source/soft_pwm.c', 'source/py_pwm.c', 'source/common.c', 'source/constants.c', 'source/boardtype_friendlyelec.c'])],
+      ext_modules      = [Extension('NPi.GPIO', ['source/py_gpio.c', 'source/c_gpio.c', 'source/cpuinfo.c', 
+                                                 'source/event_gpio.c', 'source/soft_pwm.c', 'source/py_pwm.c', 
+                                                 'source/common.c', 'source/constants.c', 
+                                                 'source/boardtype_friendlyelec.c'])],
       data_files       = [('/NPi' , ['LICENSE', 'README.md', 'CHANGELOG.txt'])])
