@@ -32,7 +32,7 @@ Topic :: Home Automation
 Topic :: System :: Hardware
 """
 
-import io, os
+import io, os, re
 from setuptools import setup, Extension
 
 here = os.path.abspath(os.path.dirname(__file__))
