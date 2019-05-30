@@ -32,6 +32,8 @@ Topic :: Home Automation
 Topic :: System :: Hardware
 """
 
+__version__ = '0.5.8.5d'
+
 #import io, os, re
 from setuptools import setup, Extension
 
@@ -44,7 +46,7 @@ from setuptools import setup, Extension
 #metadata = dict(re.findall(r"""__([a-z]+)__ = "([^"]+)""", readall('NPi', 'GPIO', '__init__.py')))
 
 setup(name             = 'NPi.GPIO',
-      version          = '0.5.8.5d', #metadata['version'],
+      version          = __version__, #metadata['version'],
       author           = 'Tungsteno',
       author_email     = 'contacts00-npigpio@yahoo.it',
       description      = 'A module to control NanoPi GPIO channels',
