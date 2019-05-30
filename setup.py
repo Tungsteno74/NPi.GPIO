@@ -42,7 +42,7 @@ def readall(*args):
         return fp.read()
 
 metadata = dict(re.findall(r"""__([a-z]+)__ = "([^"]+)""", readall('NPi/GPIO', '__init__.py')))
-
+print(metadata)
 
 setup(name             = 'NPi.GPIO',
       version          = metadata['version'],
