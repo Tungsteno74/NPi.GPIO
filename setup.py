@@ -34,19 +34,31 @@ Topic :: Home Automation
 Topic :: System :: Hardware
 """
 
+#import io, os, re
 from setuptools import setup, Extension
 
+#here = os.path.abspath(os.path.dirname(__file__))
+
+#def readall(*args):
+#    with io.open(os.path.join(here, *args), encoding='utf8') as fp:
+#        return fp.read()
+
+#metadata = dict(re.findall(r"""__([a-z]+)__ = "([^"]+)""", readall('NPi', 'GPIO', '__init__.py')))
+
 setup(name             = 'NPi.GPIO',
-      version          = __version__,
+      version          = __version__, #metadata['version'],
       author           = 'Tungsteno',
       author_email     = 'contacts00-npigpio@yahoo.it',
       description      = 'A module to control NanoPi GPIO channels',
       long_description = open('README.md').read(),
-      long_description_content_type = "text/markdown",
+      long_description_content_type = 'text/markdown',
       license          = 'MIT',
       keywords         = 'NanoPi GPIO',
       url              = 'https://github.com/Tungsteno74/NPi.GPIO',
       classifiers      = list(filter(None, classifiers.split('\n'))),
-      packages         = ['NPi'],
-      ext_modules      = [Extension('NPi.GPIO', ['source/py_gpio.c', 'source/c_gpio.c', 'source/cpuinfo.c', 'source/event_gpio.c', 'source/soft_pwm.c', 'source/py_pwm.c', 'source/common.c', 'source/constants.c', 'source/boardtype_friendlyelec.c'])],
+      packages         = ['NPi', 'NPi.GPIO'],
+      ext_modules      = [Extension('NPi._GPIO', ['source/py_gpio.c', 'source/c_gpio.c', 'source/cpuinfo.c', 
+                                                 'source/event_gpio.c', 'source/soft_pwm.c', 'source/py_pwm.c', 
+                                                 'source/common.c', 'source/constants.c', 
+                                                 'source/boardtype_friendlyelec.c'])],
       data_files       = [('/NPi' , ['LICENSE', 'README.md', 'CHANGELOG.txt'])])
