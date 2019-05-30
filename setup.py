@@ -20,7 +20,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-__version__ = '0.5.8.4'
+__version__ = '0.5.8.5d'
 
 classifiers = """\
 Development Status :: 5 - Production/Stable
