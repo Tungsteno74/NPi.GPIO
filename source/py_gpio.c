@@ -638,7 +638,7 @@ PyMethodDef npi_gpio_methods[] = {
 #if PY_MAJOR_VERSION > 2
 static struct PyModuleDef npigpiomodule = {
    PyModuleDef_HEAD_INIT,
-   "NPi.GPIO",       // name of module
+   "NPi._GPIO",       // name of module
    moduledocstring,  // module documentation, may be NULL
    -1,               // size of per-interpreter state of the module, or -1 if the module keeps state in global variables.
    npi_gpio_methods
@@ -646,9 +646,9 @@ static struct PyModuleDef npigpiomodule = {
 #endif
 
 #if PY_MAJOR_VERSION > 2
-PyMODINIT_FUNC PyInit_GPIO(void)
+PyMODINIT_FUNC PyInit__GPIO(void)
 #else
-PyMODINIT_FUNC initGPIO(void)
+PyMODINIT_FUNC init_GPIO(void)
 #endif
 {
     int i;
@@ -658,7 +658,7 @@ PyMODINIT_FUNC initGPIO(void)
     if ((module = PyModule_Create(&npigpiomodule)) == NULL)
         return NULL;
 #else
-    if ((module = Py_InitModule3("NPi.GPIO", npi_gpio_methods, moduledocstring)) == NULL)
+    if ((module = Py_InitModule3("NPi._GPIO", npi_gpio_methods, moduledocstring)) == NULL)
         return;
 #endif
 
