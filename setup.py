@@ -20,6 +20,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
+__version__ = '0.5.8.5d'
+
 classifiers = """\
 Development Status :: 5 - Production/Stable
 Operating System :: POSIX :: Linux
@@ -31,8 +33,6 @@ Topic :: Software Development
 Topic :: Home Automation
 Topic :: System :: Hardware
 """
-
-__version__ = '0.5.8.5d'
 
 #import io, os, re
 from setuptools import setup, Extension
