@@ -41,7 +41,7 @@ def readall(*args):
     with io.open(os.path.join(here, *args), encoding='utf8') as fp:
         return fp.read()
 
-metadata = dict(re.findall(r"""__([a-z]+)__ = "([^"]+)""", readall('NPi', '__init__.py')))
+metadata = dict(re.findall(r"""__([a-z]+)__ = "([^"]+)""", readall('NPi/GPIO', '__init__.py')))
 
 
 setup(name             = 'NPi.GPIO',
