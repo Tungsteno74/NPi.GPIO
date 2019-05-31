@@ -71,6 +71,19 @@ int setup(void)
     int mem_fd;
     uint8_t *gpio_mem;
 
+    // try /dev/gpiomem first - this does not require root privs
+    if ((mem_fd = open("/dev/gpiomem", O_RDWR|O_SYNC)) > 0)
+    {
+        gpio_map = (uint32_t *)mmap(NULL, BLOCK_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, mem_fd, 0);
+        if ((uint32_t)gpio_map < 0) {
+            return SETUP_MMAP_FAIL;
+        } else {
+            return SETUP_OK;
+        }
+    }
+    
+    // revert to /dev/mem method - requires root    
+    // mmap the GPIO memory registers
     if ((mem_fd = open("/dev/mem", O_RDWR | O_SYNC)) < 0)
     {
         return SETUP_DEVMEM_FAIL;
