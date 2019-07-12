@@ -34,19 +34,10 @@ Topic :: Home Automation
 Topic :: System :: Hardware
 """
 
-#import io, os, re
 from setuptools import setup, Extension
 
-#here = os.path.abspath(os.path.dirname(__file__))
-
-#def readall(*args):
-#    with io.open(os.path.join(here, *args), encoding='utf8') as fp:
-#        return fp.read()
-
-#metadata = dict(re.findall(r"""__([a-z]+)__ = "([^"]+)""", readall('NPi', 'GPIO', '__init__.py')))
-
 setup(name             = 'NPi.GPIO',
-      version          = __version__, #metadata['version'],
+      version          = __version__,
       author           = 'Tungsteno',
       author_email     = 'contacts00-npigpio@yahoo.it',
       description      = 'A module to control NanoPi GPIO channels',
