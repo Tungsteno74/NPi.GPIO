@@ -32,6 +32,19 @@ SOFTWARE.
 static PyObject *npi_revision;
 static int gpio_warnings = 1;
 
+const int pin_to_gpio_rev1[27];
+const int pin_to_gpio_rev2[27];
+const int physToGpioR3 [64];
+
+const int (*pin_to_gpio)[64];
+
+
+// const int pinTobcm_BP [64];
+// const int physToGpioR3 [64];
+
+int gpio_direction[64];
+
+
 struct py_callback
 {
     unsigned int gpio;

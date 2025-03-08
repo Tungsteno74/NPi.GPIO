@@ -19,27 +19,27 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-
+#pragma once 
 #define PY_PUD_CONST_OFFSET 20
 #define PY_EVENT_CONST_OFFSET 30
 
-PyObject *high;
-PyObject *low;
-PyObject *input;
-PyObject *output;
-PyObject *pwm;
-PyObject *serial;
-PyObject *i2c;
-PyObject *spi;
-PyObject *unknown;
-PyObject *board;
-PyObject *bcm;
-PyObject *raw;
-PyObject *pud_off;
-PyObject *pud_up;
-PyObject *pud_down;
-PyObject *rising_edge;
-PyObject *falling_edge;
-PyObject *both_edge;
+extern PyObject *high;
+extern PyObject *low;
+extern PyObject *input;
+extern PyObject *output;
+extern PyObject *pwm;
+extern PyObject *serial;
+extern PyObject *i2c;
+extern PyObject *spi;
+extern PyObject *unknown;
+extern PyObject *board;
+extern PyObject *bcm;
+extern PyObject *raw;
+extern PyObject *pud_off;
+extern PyObject *pud_up;
+extern PyObject *pud_down;
+extern PyObject *rising_edge;
+extern PyObject *falling_edge;
+extern PyObject *both_edge;
 
 void define_constants(PyObject *module);
