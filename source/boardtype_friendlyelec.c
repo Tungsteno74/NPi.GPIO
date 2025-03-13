@@ -140,8 +140,11 @@ static int getAllwinnerBoardID(char* boardId, int boardIdMaxLen)
     FILE *f;
     int ret = -1;
 
-    if (!(f = fopen("/sys/class/sunxi_info/sys_info", "r"))) {
-        return -1;
+   if (!(f = fopen("/sys/class/sunxi_info/sys_info", "r"))) {
+        if (!(f = fopen("/etc/sys_info", "r"))) {
+            LOGE("open /sys/class/sunxi_info/sys_info failed, put information in /etc/sys_info");
+            return -1;
+        }
     }
 
     while (!feof(f)) {

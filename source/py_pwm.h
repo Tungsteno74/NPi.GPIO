@@ -20,5 +20,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-PyTypeObject PWMType;
+#pragma once 
+
+extern PyTypeObject PWMType;
 PyTypeObject *PWM_init_PWMType(void);
